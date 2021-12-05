@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [10,12,14,16]
+        node-version: [12,14,16]
     name: Build&Test,Node.js ${{ matrix.node-version }}
     steps:
       - name: Checkout the repository
