@@ -5,37 +5,27 @@ on:
 env:
   FORCE_COLOR: 2
 jobs:
-  full:
-    name: Node.js 15 Full
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v2
-      - name: Install Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 15
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-      - name: Run tests
-        run: yarn test
-  short:
+  build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version:
-          - 14
-          - 12
-          - 10
-    name: Node.js ${{ matrix.node-version }} Quick
+        node-version: [10,12,14,16]
+    name: Build&Test,Node.js ${{ matrix.node-version }}
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6
       - name: Install Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+          cache: pnpm
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-      - name: Run unit tests
-        run: npx jest
+        run: pnpm i
+      - name: Run test & lint
+        run: pnpm test && pnpm lint
+      - name: Build
+        run: pnpm build

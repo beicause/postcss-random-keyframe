@@ -13,7 +13,8 @@
   "files": ["dist"],
   "scripts": {
     "build": "tsc",
-    "test": "jest --coverage && eslint ./src/*",
+    "test": "jest --coverage",
+    "lint": "eslint ./src/*",
     "publish": "clean-publish"
   },
   "author": "Luo Zhihao <1494181792@qq.com>",
