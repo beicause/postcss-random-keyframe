@@ -18,7 +18,10 @@
   },
   "author": "Luo Zhihao <1494181792@qq.com>",
   "license": "MIT",
-  "repository": "github.com/beicause/postcss-random-keyframe",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beicause/postcss-random-keyframe.git"
+  },
   "engines": {
     "node": ">=12.0.0"
   },
