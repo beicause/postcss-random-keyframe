@@ -14,8 +14,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest --coverage",
-    "lint": "eslint ./src/*",
-    "publish": "clean-publish"
+    "lint": "eslint ./src/*"
   },
   "author": "Luo Zhihao <1494181792@qq.com>",
   "license": "MIT",
@@ -30,7 +29,6 @@
     "@types/jest": "^27.0.3",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
-    "clean-publish": "^3.4.4",
     "eslint": "^8.4.0",
     "eslint-define-config": "^1.2.0",
     "eslint-plugin-jest": "^25.3.0",
