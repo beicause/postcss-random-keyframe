@@ -59,4 +59,15 @@ module.exports = {
 }
 ```
 
+### Options
+
+```ts
+type Options = {
+  useRandomGlobal?: boolean,// whether to use random() globally, or just in @keyframes. default: false
+  floatingPoint?: number,   // the number of digits after decimal point, default: 7
+  randomSeed?: number,      // initial seed to generate random number, default: 0
+  offset?: number           // offset for iteration, default: 7
+}
+```
+
 [official docs]: https://github.com/postcss/postcss#usage

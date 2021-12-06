@@ -43,8 +43,6 @@ function replaceKeyframeRule(atRule: AtRule, count: number, offset: number) {
     for (let i = 0; i < count; i++) {
       rule.cloneBefore({
         selectors: rule.selectors.map(selector => {
-          console.log(selector)
-
           let time = (100 * i + selectorToNumber(selector)) / count
           if (_offset === 0) _offset = time * offset
           time += _offset * i
@@ -60,7 +58,7 @@ const plugin: PluginCreator<Options> = (opts) => {
 
   const optsResolved: OptionsResolved = {
     useRandomGlobal: opts?.useRandomGlobal || false,
-    floatingPoint: opts?.floatingPoint || 5,
+    floatingPoint: opts?.floatingPoint || 7,
     randomSeed: { seed: opts?.randomSeed || 0 },
     offset: opts?.offset || 0.0000001
   }
