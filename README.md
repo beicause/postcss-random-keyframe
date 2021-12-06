@@ -1,13 +1,16 @@
 # postcss-random-keyframe
 
+> Still under development.  
+
 [PostCSS] plugin for making random animation.
+ It provides a random function and generates keyframes repeatedly:
 
 [PostCSS]: https://github.com/postcss/postcss
 
 ```css
 /* Input example */
-@keyframes a{
-  iteration-count:5;
+@keyframes a {
+  iteration-count:5; /* add this property to iterate */
   from { transform: translate(random()px,random(-0.2,10)px) }
   to { transform: translate(random()px,random()px) } 
 }
@@ -15,7 +18,7 @@
 
 ```css
 /* Output example */
-@keyframes a{
+@keyframes a {
   iteration-count:5;
   0% { transform: translate(0.21132px,7.03611px) }
   20.000002% { transform: translate(0.54677px,7.33579px) }
