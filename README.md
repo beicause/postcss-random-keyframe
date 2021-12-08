@@ -56,15 +56,18 @@ module.exports = {
   ]
 }
 ```
+## CSS Property
+- **random(min, max):**  means [min,max], random() means [0,1], random(num) means [0,num]  
+- **iteration-count:** used to iterate keyframe with offset, only effective in @keyframes rule
 
-### Options
+## Options
 
 ```ts
 type Options = {
   scope?: 'keyframe'|'global',// whether to use random() globally, or just in @keyframes. default: false
   floatingPoint?: number,   // the number of digits after decimal point, default: 7
   randomSeed?: number,      // initial seed to generate random number, default: 0
-  offset?: number           // offset for iteration, default: 7
+  offset?: number           // offset for iteration, default: 0.0000001
 }
 ```
 
