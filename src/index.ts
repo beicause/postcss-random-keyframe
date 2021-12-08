@@ -3,7 +3,7 @@ import { Seed, seedRandom } from './utils'
 
 export * from './utils'
 export type Options = {
-  useRandomGlobal?: boolean,
+  scope?: 'Keyframe' | 'global',
   floatingPoint?: number,
   randomSeed?: number,
   offset?: number
@@ -13,12 +13,18 @@ export type OptionsResolved = Omit<Required<Options>, 'randomSeed'> & { randomSe
 const randomRegex = /random\s*\(.*?\)/g
 
 function replaceRandom(input: string, onNaN: (nanStr: string) => void, seed: Seed, floatingPoint?: number): string {
-  if (input.indexOf(',') === -1) return seedRandom(seed).toFixed(floatingPoint)
   const [s1, s2] = input.replace('random', '').replace(/[()]/g, '').split(',')
-  const a = Number(s1)
-  const b = Number(s2)
+  let a = Number(s1)
   isNaN(a) && onNaN(s1)
-  isNaN(b) && onNaN(s2)
+  let b: number
+  if (s2) {
+    b = Number(s2)
+    isNaN(b) && onNaN(s2)
+  }
+  else {
+    b = a
+    a = 0
+  }
   return seedRandom(seed, a, b).toFixed(floatingPoint)
 }
 
@@ -57,7 +63,7 @@ function replaceKeyframeRule(atRule: AtRule, count: number, offset: number) {
 const plugin: PluginCreator<Options> = (opts) => {
 
   const optsResolved: OptionsResolved = {
-    useRandomGlobal: opts?.useRandomGlobal || false,
+    scope: opts?.scope || 'Keyframe',
     floatingPoint: opts?.floatingPoint || 7,
     randomSeed: { seed: opts?.randomSeed || 0 },
     offset: opts?.offset || 0.0000001
@@ -65,8 +71,8 @@ const plugin: PluginCreator<Options> = (opts) => {
   return {
     postcssPlugin: 'postcss-random-keyframe',
     OnceExit(root) {
-      if (opts?.useRandomGlobal) replaceRandoms(root, optsResolved)
-      else root.walkAtRules('keyframes', atRule => replaceRandoms(atRule, optsResolved))
+      if (optsResolved.scope === 'global') replaceRandoms(root, optsResolved)
+      else if (optsResolved.scope === 'Keyframe') root.walkAtRules('keyframes', atRule => replaceRandoms(atRule, optsResolved))
 
     },
     AtRule: {

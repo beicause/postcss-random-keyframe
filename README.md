@@ -1,7 +1,5 @@
 # postcss-random-keyframe
 
-> Still under development.  
-
 [PostCSS] plugin for making random animation.
  It provides a random function and generates keyframes repeatedly:
 
@@ -63,7 +61,7 @@ module.exports = {
 
 ```ts
 type Options = {
-  useRandomGlobal?: boolean,// whether to use random() globally, or just in @keyframes. default: false
+  scope?: 'keyframe'|'global',// whether to use random() globally, or just in @keyframes. default: false
   floatingPoint?: number,   // the number of digits after decimal point, default: 7
   randomSeed?: number,      // initial seed to generate random number, default: 0
   offset?: number           // offset for iteration, default: 7

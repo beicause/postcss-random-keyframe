@@ -16,16 +16,17 @@ async function runWithoutWarnings(
   return res
 }
 
+const cssRule = `transform: translate(random()px,random(-0.2,10)px);margin:random(10)px`
 it("random in global", async () => {
   const css = `
-  a { transform: translate(random()px,random(-0.2,10)px) }
+  a { ${cssRule} }
   `
   const resDisabled = await runWithoutWarnings(css)
-  const res = await runWithoutWarnings(css, { useRandomGlobal: true })
+  const res = await runWithoutWarnings(css, { scope: "global" })
   expect(resDisabled.css).toEqual(css)
   expect(res.css).toMatchInlineSnapshot(`
     "
-      a { transform: translate(0.2113212px,7.0361060px) }
+      a { transform: translate(0.2113212px,7.0361060px);margin:5.4677212px }
       "
   `)
 })
@@ -33,17 +34,25 @@ it("random in global", async () => {
 it("random in keyframes", async () => {
   const res = await runWithoutWarnings(`
   @keyframes a{
-    to { transform: translate(random()px,random(-0.2,10)px) }
+    to { ${cssRule} }
   }`)
   expect(res.css).toMatchInlineSnapshot(`
     "
       @keyframes a{
-        to { transform: translate(0.2113212px,7.0361060px) }
+        to { transform: translate(0.2113212px,7.0361060px);margin:5.4677212px }
       }"
   `)
 })
 
 it("random with invalid number", async () => {
+  await expect(
+    run(`
+  @keyframes a{
+    to { transform: translate(random(1a)px,random(-0.2,10)px) }
+  }`)
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"postcss-random-keyframe: <css input>:3:38: Invalid number \\"1a\\""`
+  )
   await expect(
     run(`
   @keyframes a{
@@ -74,7 +83,7 @@ it("iteration keyframes", async () => {
   const res = await runWithoutWarnings(`
     @keyframes a{
       iteration-count:5;
-      from { transform: translate(random()px,random(-0.2,10)px) }
+      from { ${cssRule} }
       to { transform: translate(random()px,random()px) } 
     }
     @keyframes b{
@@ -87,29 +96,29 @@ it("iteration keyframes", async () => {
     "
         @keyframes a{
           iteration-count:5;
-          0% { transform: translate(0.2113212px,7.0361060px) }
-          20.000002% { transform: translate(0.5467721px,7.3357922px) }
-          40.000004% { transform: translate(0.8194659px,0.4472068px) }
-          60.000006% { transform: translate(0.3750814px,8.4073868px) }
-          80.000008% { transform: translate(0.9667052px,5.2755916px) }
-          20% { transform: translate(0.1992755px,0.6731996px) }
-          40.000002% { transform: translate(0.6406936px,0.3023748px) }
-          60.000004% { transform: translate(0.5996013px,0.1033608px) }
-          80.000006% { transform: translate(0.5698260px,0.1625772px) }
-          100% { transform: translate(0.3414909px,0.4182956px) } 
+          0% { transform: translate(0.2113212px,7.0361060px);margin:5.4677212px }
+          20.000002% { transform: translate(0.7388032px,8.1585520px);margin:0.6345165px }
+          40.000004% { transform: translate(0.3750814px,8.4073868px);margin:9.6670525px }
+          60.000006% { transform: translate(0.5368227px,1.8326106px);margin:6.7319959px }
+          80.000008% { transform: translate(0.6406936px,2.8842233px);margin:5.9960134px }
+          20% { transform: translate(0.1033608px,0.5698260px) }
+          40.000002% { transform: translate(0.1625772px,0.3414909px) }
+          60.000004% { transform: translate(0.4182956px,0.7787937px) }
+          80.000006% { transform: translate(0.7717507px,0.2644504px) }
+          100% { transform: translate(0.8649177px,0.8108068px) } 
         }
         @keyframes b{
           iteration-count:5;
-          0% { transform: translate(0.7787937px,7.6718570px) }
-          20.000002% { transform: translate(0.2644504px,8.6221605px) }
-          40.000004% { transform: translate(0.8108068px,5.1545628px) }
-          60.000006% { transform: translate(0.8376157px,8.7283230px) }
-          80.000008% { transform: translate(0.6164823px,0.9582562px) }
-          12% { transform: translate(0.3819745px,0.9556927px) }
-          32.0000012% { transform: translate(0.1094007px,0.7474194px) }
-          52.0000024% { transform: translate(0.9592550px,0.2418210px) }
-          72.0000036% { transform: translate(0.3883273px,0.0438357px) }
-          92.0000048% { transform: translate(0.9274820px,0.7213649px) } 
+          0% { transform: translate(0.5249571px,8.3436806px) }
+          20.000002% { transform: translate(0.8753258px,6.0881199px) }
+          40.000004% { transform: translate(0.1135545px,3.6961394px) }
+          60.000006% { transform: translate(0.9556927px,0.9158873px) }
+          80.000008% { transform: translate(0.7474194px,9.5844007px) }
+          12% { transform: translate(0.2418210px,0.3883273px) }
+          32.0000012% { transform: translate(0.0438357px,0.9274820px) }
+          52.0000024% { transform: translate(0.7213649px,0.6261017px) }
+          72.0000036% { transform: translate(0.5830504px,0.1631987px) }
+          92.0000048% { transform: translate(0.1227195px,0.6251929px) } 
         }
       "
   `)
